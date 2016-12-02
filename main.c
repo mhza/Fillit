@@ -6,13 +6,13 @@
 /*   By: mhaziza <mhaziza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/26 22:15:36 by mhaziza           #+#    #+#             */
-/*   Updated: 2016/12/01 15:53:01 by mhaziza          ###   ########.fr       */
+/*   Updated: 2016/12/02 16:25:26 by mhaziza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-char	*ft_try_square(char *map, int size, char **figures)
+char	*ft_try_square(char *map, int size, const char **figures)
 {
 	map = ft_new_map(size);
 	map = is_solved(map, 0, size, figures);
@@ -27,7 +27,7 @@ char	**ft_map_result(char *str)
 	char	*id_fig;
 	char	**figures;
 	int		count;
-	t_line	fig;
+	t_read	fig;
 
 	if ((figures = (char**)malloc(sizeof(char*))))
 		figures[0] = 0;
@@ -37,7 +37,7 @@ char	**ft_map_result(char *str)
 	while ((ft_strstr(str, "\n\n") != NULL) || ft_strlen(str) == 20)
 	{
 		count += 1;
-		ft_bzero(&fig, sizeof(fig));
+		ft_bzero(&fig, sizeof(t_read));
 		if ((id_fig = ft_findtet(ft_strncpy(ft_strnew(20), str, 20), 0, &fig))
 			== NULL)
 			return (NULL);
@@ -69,8 +69,10 @@ int		ft_fillit(int fd)
 		return (0);
 	if ((map = ft_strnew(1)) != NULL)
 		map[0] = '\0';
-	if ((map = ft_try_square(map, 2, figures)) == NULL)
+	if ((map = ft_try_square(map, 2, (const char**)figures)) == NULL)
 		return (0);
+	if (figures && figures[0])
+		free(figures);
 	ft_putstr(map);
 	return (1);
 }
