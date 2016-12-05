@@ -6,7 +6,7 @@
 /*   By: mhaziza <mhaziza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/26 22:15:36 by mhaziza           #+#    #+#             */
-/*   Updated: 2016/12/05 12:30:33 by mhaziza          ###   ########.fr       */
+/*   Updated: 2016/12/05 12:49:55 by mhaziza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,9 @@ int			main(int ac, char **av)
 	}
 	if ((fd = open(av[1], O_RDONLY)) == -1)
 		return (0);
-	if (ft_fillit(fd))
+	if (ft_fillit(fd) != 1)
+		write(1, "error\n", 6);
+	if (close(fd) > 0)
 		return (1);
-	write(1, "error\n", 6);
 	return (0);
 }
