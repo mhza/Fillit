@@ -6,32 +6,13 @@
 /*   By: mhaziza <mhaziza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 17:23:45 by mhaziza           #+#    #+#             */
-/*   Updated: 2016/12/02 16:50:47 by mhaziza          ###   ########.fr       */
+/*   Updated: 2016/12/05 12:22:08 by mhaziza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-char	*ft_new_map(int size)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	if (!(tmp = ft_strnew((size + 1) * size)))
-		return (NULL);
-	while (i < (size + 1) * (size))
-	{
-		if ((i == 0 || (i + 1) % (size + 1) != 0))
-			tmp[i] = '.';
-		else
-			tmp[i] = '\n';
-		i++;
-	}
-	return (tmp);
-}
-
-char	*ft_go_and_place(char *map, t_write ln, int position, int size)
+static char	*ft_go_and_place(char *map, t_write ln, int position, int size)
 {
 	int		i;
 	int		j;
@@ -59,7 +40,7 @@ char	*ft_go_and_place(char *map, t_write ln, int position, int size)
 	return (map);
 }
 
-char	*ft_we_place(char *map, const char *idfig, int position, int size)
+static char	*ft_we_place(char *map, const char *idfig, int position, int size)
 {
 	t_write	ln;
 
@@ -77,7 +58,7 @@ char	*ft_we_place(char *map, const char *idfig, int position, int size)
 	return (map);
 }
 
-char	*is_solved(char *map, int position, int square_size,
+char		*is_solved(char *map, int position, int square_size,
 		const char **figures)
 {
 	char	*map_tmp;

@@ -6,13 +6,20 @@
 /*   By: mhaziza <mhaziza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/26 15:05:20 by mhaziza           #+#    #+#             */
-/*   Updated: 2016/12/02 16:20:16 by mhaziza          ###   ########.fr       */
+/*   Updated: 2016/12/05 12:19:26 by mhaziza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-t_read	*ft_ifpix(int count, t_read *ln)
+static t_read	*ft_ifnopix(t_read *ln)
+{
+	if (ln->is_pix == 1)
+		ln->is_pix = -1;
+	return (ln);
+}
+
+static t_read	*ft_ifpix(int count, t_read *ln)
 {
 	ln->linepix += 1;
 	ln->allpix += 1;
@@ -24,7 +31,7 @@ t_read	*ft_ifpix(int count, t_read *ln)
 	return (ln);
 }
 
-t_read	*ft_ifend(t_read *ln)
+static t_read	*ft_ifend(t_read *ln)
 {
 	if (!ln->linepix && ln->allpix)
 		ln->is_emptyafterpix = 1;
@@ -44,7 +51,7 @@ t_read	*ft_ifend(t_read *ln)
 	return (ln);
 }
 
-char	*ft_create_id(int code1, int code2)
+static char		*ft_create_id(int code1, int code2)
 {
 	char *idfigure;
 
@@ -56,17 +63,13 @@ char	*ft_create_id(int code1, int code2)
 	return (idfigure);
 }
 
-char	*ft_findtet(const char *s, int count, t_read *ln)
+char			*ft_findtet(const char *s, int count, t_read *ln)
 {
 	if (!s)
 		return (NULL);
 	count += 1;
 	if (s[0] == '.' && count % 5)
-	{
-		if (ln->is_pix == 1)
-			ln->is_pix = -1;
-		return (ft_findtet(s + 1, count, ln));
-	}
+		return (ft_findtet(s + 1, count, ft_ifnopix(ln)));
 	if (s[0] == '#' && count % 5 && ln->allpix < 4 &&
 			ln->is_pix >= 0 && !ln->is_emptyafterpix)
 		return (ft_findtet(s + 1, count, ft_ifpix(count, ln)));

@@ -6,13 +6,32 @@
 /*   By: mhaziza <mhaziza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/26 22:15:36 by mhaziza           #+#    #+#             */
-/*   Updated: 2016/12/02 16:25:26 by mhaziza          ###   ########.fr       */
+/*   Updated: 2016/12/05 12:30:33 by mhaziza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-char	*ft_try_square(char *map, int size, const char **figures)
+static char	*ft_new_map(int size)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	if (!(tmp = ft_strnew((size + 1) * size)))
+		return (NULL);
+	while (i < (size + 1) * (size))
+	{
+		if ((i == 0 || (i + 1) % (size + 1) != 0))
+			tmp[i] = '.';
+		else
+			tmp[i] = '\n';
+		i++;
+	}
+	return (tmp);
+}
+
+static char	*ft_try_square(char *map, int size, const char **figures)
 {
 	map = ft_new_map(size);
 	map = is_solved(map, 0, size, figures);
@@ -22,7 +41,7 @@ char	*ft_try_square(char *map, int size, const char **figures)
 		return (ft_try_square(map, size + 1, figures));
 }
 
-char	**ft_map_result(char *str)
+static char	**ft_get_idfigures(char *str)
 {
 	char	*id_fig;
 	char	**figures;
@@ -46,10 +65,12 @@ char	**ft_map_result(char *str)
 			return (NULL);
 		str = str + 20 + 1;
 	}
+	if (str && str[0])
+		free(str);
 	return (figures);
 }
 
-int		ft_fillit(int fd)
+static int	ft_fillit(int fd)
 {
 	char	*str;
 	int		result_read;
@@ -65,7 +86,7 @@ int		ft_fillit(int fd)
 	if (result_read % 21 != 20)
 		return (0);
 	str[ft_strlen(str)] = '\0';
-	if ((figures = ft_map_result(str)) == NULL)
+	if ((figures = ft_get_idfigures(str)) == NULL)
 		return (0);
 	if ((map = ft_strnew(1)) != NULL)
 		map[0] = '\0';
@@ -77,7 +98,7 @@ int		ft_fillit(int fd)
 	return (1);
 }
 
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	int		fd;
 
